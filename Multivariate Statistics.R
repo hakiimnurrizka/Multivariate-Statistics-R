@@ -66,7 +66,10 @@ pred_fac = predict(reg_fac, newdata = reg.test, type = "response")
 reg.test$"qd predicted" = pred_fac
 reg.test[c("qd","qd predicted")]
 
-##use a different dataset
+
+###Source : https://towardsdatascience.com/exploratory-factor-analysis-in-r-e31b0015f224###
+
+##use a different dataset (BFI dataset from psych library)
 bfi = remove_missing(bfi)
 head(bfi,10)
 bfi1 = bfi[,-c(26:28)]
