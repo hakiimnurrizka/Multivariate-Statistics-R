@@ -1,3 +1,3 @@
 # Multivariate-Statistics-R
-R codes for basic of multivariate statistics
-blablabla
+R codes and logs for basic of multivariate statistics
+Some of the datasets used were from R library
