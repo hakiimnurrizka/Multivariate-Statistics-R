@@ -2,8 +2,8 @@ library(Hmisc)
 library(matlib)
 library(polynom)
 library(Matrix)
-
-### 2.5
+### Problems from chapter 2
+## 2.5
 a = matrix(c(1,2,3,2,-1,1), nrow = 2, ncol = 3, byrow = T) #input matrix, byrow to clarify that we input the element of the matrix in a row-sequential manner
 b = matrix(c(3,-2,2,0,-1,1), nrow = 3, ncol = 2, byrow = T)
 a%*%b #multiplying matrix use %*%
@@ -11,11 +11,11 @@ b%*%a
 tr(a%*%b) == tr(b%*%a) #tr() to compute trace, then checking whether both  trace have the same  value or not
 
 
-### 2.13
+## 2.13
 mat_a = matrix(c(2,1,2,3,2,0,1,0,1), nrow = 3, ncol = 3, byrow = T)
 mat_b = matrix(c(1,1,1,0,2,1,1,2,2,3,1,2), nrow = 3, ncol = 4, byrow = T)
 
-##non partition
+#non partition
 mat_ab = mat_a%*%mat_b
 mat_ab
 ab_i = cbind(mat_ab, diag(3)) #ab matrix and I in the right
@@ -31,7 +31,7 @@ mp_inv
 mat_ainva = mat_ab%*%mp_inv%*%mat_ab
 mat_ainva
 
-##partition
+#partition
 #manual partitioning
 mat_a11 = mat_a[1:2,1:2]
 mat_a12 = matrix(mat_a[1:2,3], nrow=2, ncol=1, byrow = T)
@@ -48,7 +48,7 @@ mat_ab21 = mat_a21%*%mat_b11+mat_a22%*%mat_b21
 mat_ab12 = mat_a11%*%mat_b12+mat_a12%*%mat_b22
 mat_ab22 = mat_a21%*%mat_b12+mat_a22%*%mat_b22
 
-#faster partitioning
+#partitioning using function from Hmisc library
 part_a = partition.matrix(mat_a, rowsep = c(2,1), colsep = c(2,1))
 part_b = partition.matrix(mat_b, rowsep = c(2,1), colsep = c(3,1))
 
@@ -58,11 +58,11 @@ part_ab12 = part_a$`1`$`1`%*%part_b$`1`$`2`+part_a$`1`$`2`%*%part_b$`2`$`2`
 part_ab22 = part_a$`2`$`1`%*%part_b$`1`$`2`+part_a$`2`$`2`%*%part_b$`2`$`2` 
 part_ab11
 
-### 2.17
+## 2.17
 waw = as.matrix(data.frame(c(3,-5,-1),c(-5,13,0),c(-1,0,1)))
 colnames(waw) = NULL #to disregard collumn naming from as.matrix()
 
-##cholesky
+#cholesky
 #manual
 chol_waw = as.matrix(data.frame(c(0,0,0),c(0,0,0),c(0,0,0)))
 chol_waw[1,1] = sqrt(waw[1,1])
@@ -77,7 +77,7 @@ chol_waw
 kekw = chol(waw)
 kekw
 
-### 2.18
+## 2.18
 waw2 = as.matrix(data.frame(c(1,2,1),c(-1,1,-1),c(1,0,-1)))
 colnames(waw2) = NULL
 #divide by each col length
@@ -92,7 +92,7 @@ t(omegalul)
 omegalul%*%t(omegalul)
 
 
-### 2.19
+## 2.19
 #look for eigen using the equation |A| = 0, the previouse equation yield a polynomial equation : -2+x+2(x^2)-(x^3)=0
 p = polynomial(c(-2,1,2,-1)) #building the polynomial
 p
@@ -110,7 +110,7 @@ det(h)
 prod(eig_h$values)
 
 
-### 2.20
+## 2.20
 j = matrix(c(3,1,1,1,0,2,1,2,0), nrow = 3, ncol = 3, byrow = T)
 
 eig_vj = Eigen(j)$vectors
@@ -120,7 +120,7 @@ gawr = t(eig_vj)%*%j%*%eig_vj
 eig_vj%*%gawr%*%t(eig_vj)
 j
 
-### 2.21
+## 2.21
 k = matrix(c(2,-1,-1,2), nrow = 2, ncol = 2, byrow = T)
 eig_k = Eigen(k)
 eig_vk =eig_k$vectors
@@ -134,7 +134,7 @@ sqrt_k = eig_vk%*%sqrt(t(dd))%*%t(eig_vk)
 sqrt_k
 sqrt_k%*%t(sqrt_k)
 
-### 2.23
+## 2.23
 v = matrix(c(4,-5,-1, 7,-2,3, -1,4,-3, 8,2,6), nrow = 4, ncol = 3, byrow = T)
 v
 rankMatrix(v)
