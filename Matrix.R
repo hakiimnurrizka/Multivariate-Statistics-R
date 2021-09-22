@@ -56,4 +56,3 @@ partition = function(x, rowsep, colsep, ...){
 }
 partition(a1, colsep = c(2,3,2,3))
 partition(a, colsep=c(5,2,3), rowsep = c(2,2))
-

@@ -25,6 +25,6 @@ mvn(iris, mvnTest = "dh")
 #energy
 mvn(iris, mvnTest = "energy")
 
-#plot perspective n contour
+#perspective andn contour plot
 mvn(iris[,2:3], mvnTest = "hz", multivariatePlot = "persp")
 mvn(iris[,3:4], mvnTest = "mardia", multivariatePlot = "contour")
