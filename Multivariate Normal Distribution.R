@@ -1,19 +1,68 @@
 ###multivariate normal distribution###
 library(mvtnorm)
 library(MVN)
+library(JWileymisc)
+library(MASS)
+library(dplyr)
+library(ellipse)
+library(rgl)
 
-##simulating data from MN(mu,sigma)
-set.seed(100)
-mu = c(1,221,98)
-sigma = matrix(c(200,1,-2,1,1325,4,-2,4,1432), nrow = 3, ncol = 3, byrow = T)
+##Simulating mutivariate normal (MN) distribution based on correlation/covariance matrix, means, and standard deviation
+set.seed(100) #setting seed for pseudo-random initiation
+#in a case where we have the covariance matrix, it is then become a straightforward method to simulate
+#MN distribution. Meanwhile in case we have correlation matrix, we use the previous equation to transform
+#correlation matrix into covariance matrix.
+#library jwileymisc provide the function to simplify this transformation
+v = matrix(c(1,.152,.096,.043,.109,
+             .152,1,.400,-.016,.297,
+             .096,.400,1,.092,.382,
+             .043,-.016,.092,1,.103,
+             .109,.297,.382,.103,1),5,5) #correlation matrix
+sigma = c(.4421,1.0880,8.5073,.4700,1.1249) #vector of standard deviation
+cov.matrix = cor2cov(v, sigma) #convert correlation into covariance matrix
+#after getting the covariance matrix, we can use mvrnorm to simulate the MN distribution based on
+#previous covariance matrix
+#in addition we also have to provide the means vector
+mu = c(.7337,2.7300,46.9970,2.6002,1.7491)
+sim.mn.data = data.frame(mvrnorm(n = 500, Sigma = cov.matrix, mu = mu)) #simulated data with total 500 observations
+str(sim.mn.data)
+sim.mn.data = rename(sim.mn.data, low = X1, high = X2, throw = X3, dodge = X4, make = X5)
 
-x = rmvnorm(100,mu , sigma,method=c("eigen", "svd", "chol"), pre0.9_9994 = FALSE)
-head(x)
-list_x = list(x[,1],x[,2], x[,3])
+##visualizing the multivariate normal data
+#after generating MN data, we can visualize the data
+#since we are limited in 3dimensional representation, we use only first 2 variables of the simulated 
+#data from before.
+#it is guaranteed that marginal distributions from MN is always normal(see Methods_of_Multivariate_Analysis-_3rd_Edition Rencher & Christensen )
+#2d contour
+sim.mn.kernel = kde2d(sim.mn.data[,1], sim.mn.data[,3], n = 150) #calculate kernel density estimate
+image(sim.mn.kernel) #heatmap based on the kernel estimate
+contour(sim.mn.kernel, add = T) #contour plot added above the heatmap
+#next is the "clean" version of bivariate normal distribution which using ellipse function
+#in addition, confidence intervals is also added
+rho = cor(sim.mn.data[,1:2])
+y_on_x = lm(high ~ low, sim.mn.data)    # Regression Y ~ X
+x_on_y = lm(low ~ high, sim.mn.data)    # Regression X ~ Y
+plot_legend = c("99% CI green", "95% CI red","90% CI blue",
+                 "Y on X black", "X on Y brown")
+plot(sim.mn.data[,1:2], xlab = "low", ylab = "high",
+     col = "dark blue",
+     main = "Bivariate Normal with Confidence Intervals")
+lines(ellipse(rho), col="red")       # ellipse() from ellipse package
+lines(ellipse(rho, level = .99), col="green")
+lines(ellipse(rho, level = .90), col="blue")
+abline(y_on_x)
+abline(x_on_y, col="brown")
+legend(3,1,legend=plot_legend,cex = .5, bty = "n")
+#3d representation
+persp(sim.mn.kernel, phi = 45, theta = 30, shade = .1, border = NA) # from base graphics package
+#using interactive plot from RGL library
+color2 = heat.colors(length(sim.mn.kernel$z))[rank(sim.mn.kernel$z)]
+persp3d(x=sim.mn.kernel, col = color2)
 
-makeProfilePlot(list_x, names= c("v1","v2", "v3"))
 
-##Multiv normality test
+##Multivariate normality test
+#there are several methods in which each of them has unique characteristics and may be better off used
+#on certain type of data.
 #mardia
 mvn(iris, mvnTest = "mardia")
 #HZ
@@ -25,6 +74,6 @@ mvn(iris, mvnTest = "dh")
 #energy
 mvn(iris, mvnTest = "energy")
 
-#perspective andn contour plot
+#we can also create perspective and contour plot using the mvn function 
 mvn(iris[,2:3], mvnTest = "hz", multivariatePlot = "persp")
 mvn(iris[,3:4], mvnTest = "mardia", multivariatePlot = "contour")
