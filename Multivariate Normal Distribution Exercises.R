@@ -6,9 +6,10 @@ library(mvtnorm)
 library(Hmisc)
 library(matlib)
 library(MVN)
+library(moments)
 set.seed(100)
 
-##4.10
+## 4.10
 mu = c(3,1,4)
 sigma = matrix(c(6,1,-2,1,13,4,-2,4,4), nrow = 3, ncol = 3, byrow = T)
 ##a
@@ -24,7 +25,7 @@ a3_z = matrix(c(1,0,0,0,0,1,0.5,0.5,0), ncol = 3, nrow = 3, byrow = T)
 mu3_z = a3_z%*%mu
 sigma3_z = a3_z%*%sigma%*%t(a3_z)
 sigma3_z
-##4.11
+## 4.11
 #simulate vector y from the defined multivariate normal dist
 y = rmvnorm(1,mu , sigma,method=c("eigen", "svd", "chol"), pre0.9_9994 = FALSE)
 #compute cholesky decomposition
@@ -40,18 +41,62 @@ sqrt_sig = eig_sig%*%sqrt(t(sigma_dd))%*%t(eig_sig)
 sqrt_sig
 #compute the new vector
 z2 = solve(sqrt_sig)%*%t(y-mu)
-##4.16
+## 4.16
 mu_k = c(2,-1,3,1)
 part_muk = partition.vector(mu_k, sep = c(2,2))
 sigma_k = matrix(c(7,3,-3,2,3,6,0,4,-3,0,5,-2, 2,4,-2,4), nrow = 4, ncol = 4, byrow = T) 
 part_sigmak = partition.matrix(sigma_k, rowsep = c(2,2), colsep = c(2,2))
-#since we arent provided with the vector x, we assume x = (2.5,1)
+#since we arent provided with the vector x, lets input our x = (2.5,1)
 xminmux = matrix(c(2.5,1)-part_muk$`2`, nrow = 2, ncol = 1)
 expect_yx = (part_muk$`1`)+part_sigmak$`1`$`2`%*%solve(part_sigmak$`2`$`2`)%*%xminmux
 expect_yx
 cov_yx = part_sigmak$`1`$`1`-part_sigmak$`1`$`2`%*%solve(part_sigmak$`2`$`2`)%*%part_sigmak$`2`$`1`
 cov_yx
-##4.24
+## 4.21
+probe = read.table("T3_6_PROBE.DAT")
+probe = probe[,-1]
+#QQ plots
+qqnorm(probe$V2)
+qqnorm(probe$V3)
+qqnorm(probe$V4)
+qqnorm(probe$V5)
+qqnorm(probe$V6)
+# skewness and kurtosis
+skewness(probe) #normal distribution should have skewness = 0. 
+#skewness<0 is called negative skewness which has a more concentrated data on the high-value points
+#while skewness>0 is called positive skewness which has data concentrated more on the low-value points
+kurtosis(probe) #normal distribution should have kurtosis = 3. 
+#kurtosis<3 means the distribution is flatter than the normal distribution while kurtosis>3 will have
+#higher peak than normal distribution
+###Skewness and Kurtosis Representation###
+set.seed(5)
+# normal (symmetric)
+x = rnorm(1000, 0,1)
+hist(x, main="Normal: Symmetrical", freq=FALSE)
+lines(density(x), col='red', lwd=3)
+abline(v = c(mean(x),median(x)),  col=c("green", "blue"), lty=c(2,2), lwd=c(3, 3))
+# exponential (positive skewness)
+x = rexp(1000,1)
+hist(x, main="Exponential: Positive Skew", freq=FALSE)
+lines(density(x), col='red', lwd=3)
+abline(v = c(mean(x),median(x)),  col=c("green", "blue"), lty=c(2,2), lwd=c(3, 3))
+# beta (negative skewness)
+x = rbeta(10000,5,2)
+hist(x, main="Beta: Negative Skew", freq=FALSE)
+lines(density(x), col='red', lwd=3)
+abline(v = c(mean(x),median(x)),  col=c("green", "blue"), lty=c(2,2), lwd=c(3, 3))
+#d'agostino test
+agostino.test(probe$V2)
+agostino.test(probe$V3)
+agostino.test(probe$V4)
+agostino.test(probe$V5)
+agostino.test(probe$V6)
+#lin-mudholkar test
+
+
+
+
+## 4.24
 hematol = read.table("T4_3_HEMATOL.DAT")
 View(hematol)
 colnames(hematol) = NULL
