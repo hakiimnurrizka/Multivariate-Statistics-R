@@ -1,7 +1,8 @@
 ###Matrix
 #Create
 set.seed(123) #setting pseudo-random number initial point
-a1 = matrix(c(rpois(10, 5)),nrow = 1) #generate random numbers from poison dist (5)
+element1 = c(12,4,5,13,13)
+a1 = matrix(c(rpois(10, 5)), nrow = 1) #generate random numbers from poison dist (5)
 a12 = matrix(c(rpois(10, 6)), nrow = 1)
 a13 = matrix(c(rpois(10, 4)), nrow = 1)
 a2 = matrix(c(rbinom(10, 100,0.3)), nrow = 1) #generate random numbers from binomial dist (100,0.3) 

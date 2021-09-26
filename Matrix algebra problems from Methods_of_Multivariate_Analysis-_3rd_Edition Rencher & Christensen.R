@@ -23,13 +23,13 @@ eche_abi = echelon(ab_i,  verbose = T, fractions = T) #row echelon form+proccedu
 ginv_ab1 = rbind(eche_abi[1:3,5:7],c(0,0,0))
 ginv_ab1
 
-mat_ab%*%ginv_ab1%*%mat_ab #check if it fulfills  (AB)(AB)^(-)(AB)=AB
+mat_ab%*%ginv_ab1%*%mat_ab #check if it fulfills equation  (AB)(AB)^(-1)(AB)=AB
 
 #moore-penrose
 mp_inv = Ginv(mat_ab)
 mp_inv
 mat_ainva = mat_ab%*%mp_inv%*%mat_ab
-mat_ainva
+mat_ainva #check if it fulfills equation  (AB)(AB)^(-1)(AB)=AB
 
 #partition
 #manual partitioning
@@ -93,7 +93,7 @@ omegalul%*%t(omegalul)
 
 
 ## 2.19
-#look for eigen using the equation |A| = 0, the previouse equation yield a polynomial equation : -2+x+2(x^2)-(x^3)=0
+#look for eigen using the equation |A| = 0, the previous equation yield a polynomial equation : -2+x+2(x^2)-(x^3)=0
 p = polynomial(c(-2,1,2,-1)) #building the polynomial
 p
 solve(p) #solving for the previous polynomial
