@@ -2,18 +2,26 @@
 library(car)
 library(RColorBrewer)
 library(stats)
+library(shiny)
+library(gridExtra)
+library(tidyverse)
+library(ggplot2)
+
+###UI
+
 
 ##data iris from r datasets
 data("iris")
 iris = as.matrix(iris[, 1:4])
 iris
+write.csv(iris, "iris.csv")
 ##Covariance and correlation on multivariate variable
 #for starter, it can be helpful to look on the scatterplot of the data
 scatterplotMatrix(iris)
 #from the scatterplot, subjectively, there are pairs of variables which shown a trend of covary
 #covary on multivariate data can be described as : tendency to create pattern relative to each variables mean
 #for instance : petal length and petal width which create a similar data point spread around each of their means
-plot(iris[,3], iris[,4])
+qplot(iris[,3], iris[,4])
 
 #to help on looking on this pattern, profile plot can be used
 #profile plot
