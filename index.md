@@ -1,8 +1,9 @@
-## Welcome to GitHub Pages
+# Characterizing and Displaying Multivariate Data in R
 
-You can use the [editor on GitHub](https://github.com/hakiimnurrizka/Multivariate-Statistics-R/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+As the name suggests, when dealing with multvariate data, we are dealing with high dimensional data. In this opportunity, i would like to share just a tiny bit of knowledge about dealing with multivariate data, in a more specifics term, how to characterize and display the multivariate data.
+To start off, lets get our data. We are using iris data which, if you are familiar with R, you are probably already know this data before.
+[Data iris](https://github.com/hakiimnurrizka/Multivariate-Statistics-R/issues/5#issue-1007386250)
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
 
 ### Markdown
 
