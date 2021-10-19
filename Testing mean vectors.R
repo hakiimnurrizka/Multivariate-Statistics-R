@@ -54,5 +54,5 @@ p.z2
 #We conclude from the pvalue above that there is not enough evidence for the null hypothesis 
 #mu* = mu = c(10,5,1200) to be accepted
 
-#Using hotellingT2 function from desctools package
+#Using hotellingT2 function from desctools package for unknown covariance matrix
 HotellingsT2Test(gen.samples, mu = mu)
