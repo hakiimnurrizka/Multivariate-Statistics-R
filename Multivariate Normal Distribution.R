@@ -30,8 +30,8 @@ sim.mn.data = rename(sim.mn.data, low = X1, high = X2, throw = X3, dodge = X4, m
 
 ##visualizing the multivariate normal data
 #after generating MN data, we can visualize the data
-#since we are limited in 3dimensional representation, we use only first 2 variables of the simulated 
-#data from before.
+#since we are limited in 3dimensional representation, we are limited to only use until first 3 variables 
+#of the simulated data from before.
 #it is guaranteed that marginal distributions from MN is always normal(see Methods_of_Multivariate_Analysis-_3rd_Edition Rencher & Christensen )
 #2d contour
 sim.mn.kernel = kde2d(sim.mn.data[,1], sim.mn.data[,3], n = 150) #calculate kernel density estimate
