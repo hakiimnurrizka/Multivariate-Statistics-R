@@ -143,7 +143,7 @@ df1 = (dim(hematol)[2]+1)*(dim(hematol)[2]+2)
 pvalue1 = dchisq(z1,df1)
 pvalue1
 #using MVN package
-mvn(data= hematol,mvnTest="royston") ###check mvn package logs
+mvn(data= hematol,mvnTest="royston")
 #testing outlier
 scatter3d(hematol[,1], hematol[,3], hematol[,6], surface = FALSE)
 #compute wilks statistics
