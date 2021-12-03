@@ -14,6 +14,7 @@ library(stats)
 library(gridExtra)
 library(tidyverse)
 library(DescTools)
+library(MVN)
 
 ##On testing mean vectors
 #at this point, most of us should have already been familiar on testing mean from 2 variables which is a univariate case.
@@ -27,7 +28,8 @@ library(DescTools)
 #simulate the samples
 meanvect = c(13,5,1250)
 cov_m = matrix(c(124,123,47,
-                 123,203,162,
+
+                                  123,203,162,
                  47,162,3257), ncol = 3)
 #define a function to sample from a MN dist
 set.seed(123)
@@ -49,10 +51,23 @@ mu.sam = apply(gen.samples, 2, mean)
 mu = c(10, 5, 1200)
 
 z2 = n*t(mu.sam-mu)%*%solve(cov_m)%*%(mu.sam-mu)
-p.z2 = dchisq(z2, 3) #Z2 is distributed as chisq(p) if null is true
+p.z2 = dchisq(z2, 3) #Z2 is distributed as chisq(p), p : degree of freedom if null is true
 p.z2
 #We conclude from the pvalue above that there is not enough evidence for the null hypothesis 
 #mu* = mu = c(10,5,1200) to be accepted
 
 #Using hotellingT2 function from desctools package for unknown covariance matrix
-HotellingsT2Test(gen.samples, mu = mu)
+HotellingsT2Test(gen.samples, mu = mu, cov_m)
+
+#assumption test
+mvn(gen.samples) #the result is expected since we draw the sample from a normal distributio
+mshapiro.test(t(gen.samples))
+det(cov(gen.samples))
+chol(cov(gen.samples))
+
+#Compare the result with univariate case
+#H0 : (1) mu1 = 10; (2) mu2 = 5; (3) mu3 = 1200
+z.test(gen.samples[,1], sigma2 = 124, mu = 10)
+z.test(gen.samples[,2], sigma2 = 203, mu = 5)
+z.test(gen.samples[,3], sigma2 = 3257, mu = 1200)
+#it can be seen that the 2nd variable ztest results in the acceptance of null hypothesis
