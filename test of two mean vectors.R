@@ -55,17 +55,16 @@ box_petal.w
 
 #Mean for each species
 kekw = iris %>% group_by(Species)%>%
-  summarise(mean_sepal_l = mean(Sepal.Length),
+  summarize(mean_sepal_l = mean(Sepal.Length),
             mean_sepal_w = mean(Sepal.Width),
             mean_petal_l = mean(Petal.Length),
             mean_petal_w = mean(Petal.Width))
 kekw
 
-
 #Assumption
 mshapiro.test(t(iris[,1:4]))
-det(cov(iris[,1:4]))
-
+det(cov(iris[,1:4])) #positive determinant
+chol(cov(iris[,1:4])) #positive definite
 
 #Statistic test
 iris_set = filter(iris, Species == "setosa")[,1:4]
@@ -85,7 +84,6 @@ f
 
 HotellingsT2(iris_set, iris_vers)
 ##hotellingsT2 statistics is already converting into F statistics
-
 
 
 ###Test for additional information
