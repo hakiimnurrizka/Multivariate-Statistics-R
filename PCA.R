@@ -1,14 +1,12 @@
 library(factoextra)
 library(readxl)
 library(ggplot2)
-library(performance)
 library(caret)
 library(ROCR)
 library(dplyr)
 client_train = read_excel("~/Github/Machine-Learning/client-data.xlsx", 
                            sheet = "client_train")
-
-client_train1 = client_train[,-c(1:11)]
+client_train1 = client_train[,-c(1,2:12)]
 
 ### PCA ###
 pca_train1 = prcomp(client_train1[,-13], scale = TRUE)
@@ -29,7 +27,7 @@ client_test1 = as.data.frame(cbind(client_test[,-c(1,13:24)],client_test.PC[,1:2
 
 ### Logistic Regression for Predictive Model ###
 ## Building the logistic regression for predictive study
-client_train_new = as.data.frame(cbind(client_train[,-c(6:23)],pca_train1$x[,1:2]))
+client_train_new = as.data.frame(cbind(client_train[,-c(1,7:24)],pca_train1$x[,1:2]))
 client_train_new[,2] = as.factor(client_train_new[,2])
 client_train_new[,3] = as.factor(client_train_new[,3])
 client_train_new[,4] = as.factor(client_train_new[,4])
@@ -46,7 +44,6 @@ head(predict_client_stat, 100)
 predictions = prediction(predict_client_stat, client_train_new$default.payment.next.month) 
 sens = data.frame(x=unlist(performance(predictions, "sens")@x.values), 
                    y=unlist(performance(predictions, "sens")@y.values))
-
 spec = data.frame(x=unlist(performance(predictions, "spec")@x.values), 
                    y=unlist(performance(predictions, "spec")@y.values))
 
