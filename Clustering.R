@@ -57,6 +57,8 @@ kmean_1st$cluster #it is found that after 1st step the algorithm already reached
 my_dummy = my_dummy[,1:2]
 fviz_nbclust(my_dummy, kmeans, method = "wss", k.max = 5)
 
+## NOTE : The previous results may differs since we are doing illustration based on randomized dummy data
+
 
 ### Application to real data
 #We use client data and cluster data based on the PCA result of 12 last predictors
