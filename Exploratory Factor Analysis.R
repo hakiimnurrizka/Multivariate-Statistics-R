@@ -1,4 +1,4 @@
-###factor analysis
+### Factor analysis ###
 library(psych)
 library(corrplot)
 library(ggplot2)
