@@ -54,3 +54,42 @@ fac1 = 'f =~ q01 + q02 + q03 + q04 + q05 + q06 + q07 + q08'
 mfac1 = cfa(fac1, data =SAQ1, std.lv = TRUE)
 summary(mfac1, fit.measures = TRUE, standardized = TRUE)
 #Adding fit.measures will show the model fit. This is a method to see how well the model fits the data.
+#To measure the fit, we use the difference between model covariance and the observed covariance. Small value 
+#of the test statistics implies a good fit. Therefore a good model should have small statistics value and
+#not rejecting the H0. You can either use the chi-square or RMSEA, rejecting any of these H0 statistics means
+#the model is not close fitting. For CFI/TLI a good fit model should have value above 0.9
+
+## Two or more factors
+#For case where we assume there are more than 1 factor, there are 3 conditions to consider : (1)uncorrelated
+#factors, (2)correlated factors, and (3)hierarchy/order of factors.
+#For the (1) case we simply assume that each factor is uncorrelated with each other. Lets say for previous
+#anxiety data we have 2 uncorrelated factors, thus the model :
+fac2 = 'f1 =~ q01 +  q03 + q04 + q05 + q08
+        f2 =~ a*q06 + a*q07
+        f1 ~~ 0*f2' #item and factor are decided from EFA
+mfac2 = cfa(fac2, data = SAQ1, std.lv = TRUE)
+summary(mfac2, fit.measures = TRUE, standardized = TRUE)
+#From the result above, model fit measurements show that 2 factors model with uncorrelated factors poorly fits
+#the data. It is also has higher test statistics of chi-square and RMSEA than the previous one factor model.
+#We can then try 2 factors model with correlated factors.
+#Case (2) we assume there is strong correlation between 2 factors behind the anxiety data. The model for 
+#2 correlated factors is :
+fac2_c = 'f1 =~ q01 +  q03 + q04 + q05 + q08
+          f2 =~ q06 + q07'
+mfac2_c = cfa(fac2_c, data = SAQ1, std.lv = TRUE)
+summary(mfac2_c, fit.measures = TRUE, standardized = TRUE)
+#The result above shows some contradiction on the test statistics where RMSEA decide that the model is a close
+#fitting for the data while chi square decide that the model is not a close fit. This is a normal occurrence
+#since the chi square statistics tends to reject null hypothesis easily when the number observations is high.
+#But all in all, when we also consider the fit measures from CFI and TLI, this 2 correlated factors is by far
+#the best model for anxiety data compared to previous models.
+#For the last case (3), we may consider that instead of 2 factors being correlated, there is another factor
+#that affects both factors. In other words, we have a structure that is ordered from : exogenous factor which
+#affects the endogenous factors which then these endogenous factors affects our item/data.
+#The model is simply adding another layer of factor equation on the endogenous factors.
+fac2_o = 'f1 =~ q01 +  q03 + q04 + q05 + q08
+          f2 =~ q06 + q07
+          f3 =~ a*f1 + a*f2'
+mfac2_o = cfa(fac2_o, data = SAQ1, std.lv = TRUE)
+summary(mfac2_o, fit.measures = TRUE, standardized = TRUE)
+#The results above shows almost the same from our previous 2 correlated factors.
