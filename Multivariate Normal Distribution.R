@@ -24,12 +24,19 @@ cov.matrix = cor2cov(v, sigma) #convert correlation into covariance matrix
 #previous covariance matrix
 #in addition we also have to provide the means vector
 mu = c(.7337,2.7300,46.9970,2.6002,1.7491)
-sim.mn.data = data.frame(mvrnorm(n = 500, Sigma = cov.matrix, mu = mu)) #simulated data with total 500 observations
+sim.mn.data = data.frame(mvrnorm(n = 5000, Sigma = cov.matrix, mu = mu)) #simulated data with total 5000 observations
 str(sim.mn.data)
 sim.mn.data = rename(sim.mn.data, low = X1, high = X2, throw = X3, dodge = X4, make = X5)
 
 ##visualizing the multivariate normal data
 #after generating MN data, we can visualize the data
+#Visualizing the simulated data can be ilustratedusing the following 1 dimension subset of previously generated matrix data.
+hist(sim.mn.data$low)#var 1
+hist(sim.mn.data$high)#var 2
+hist(sim.mn.data$throw)#var 3
+hist(sim.mn.data$dodge)#var 4
+hist(sim.mn.data$make)#var 5
+
 #since we are limited in 3dimensional representation, we are limited to only use until first 3 variables 
 #of the simulated data from before.
 #it is guaranteed that marginal distributions from MN is always normal(see Methods_of_Multivariate_Analysis-_3rd_Edition Rencher & Christensen )
