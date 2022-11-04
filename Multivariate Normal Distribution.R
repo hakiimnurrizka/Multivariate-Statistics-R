@@ -16,7 +16,7 @@ rnorm(1, mean = mu, sigma) #If we do another run on the same code, the value of 
 #Thus in R, to make sure we get the same output on a randomization process, we are setting a "pseudo" random number
 #using function set.seed()
 set.seed(11)
-x1 = rnorm(1, mean = mu, sigma)
+rnorm(1, mean = mu, sigma)
 #Suppose we want to get more than 1 realization number, we can either set the number of sampling in the function
 #of randomization or define an independent sampling method.
 #Lets say, we want to get a sample with size of 1000
