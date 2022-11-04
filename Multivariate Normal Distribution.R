@@ -7,6 +7,40 @@ library(dplyr)
 library(ellipse)
 library(rgl)
 
+##To give an introduction, lets do a quick review on normal univariate distrivution
+#Suppose we have a normally distributed random variable X with some mean mu and standard deviance sigma
+mu = 0 #Set mu = 0
+sigma = 1 #Set sigma = 1
+rnorm(1, mean = mu, sigma) #randomize a number x1 (realization of variable X)
+rnorm(1, mean = mu, sigma) #If we do another run on the same code, the value of x1 will change
+#Thus in R, to make sure we get the same output on a randomization process, we are setting a "pseudo" random number
+#using function set.seed()
+set.seed(11)
+x1 = rnorm(1, mean = mu, sigma)
+#Suppose we want to get more than 1 realization number, we can either set the number of sampling in the function
+#of randomization or define an independent sampling method.
+#Lets say, we want to get a sample with size of 1000
+set.seed(11)
+x_samp1 = rnorm(1000, mean = mu, sigma)#By setting the number of extracted realization numbers to n = 1000
+
+x_samp2 = rep(NA, 1000)#We set a "void" vector to be used as the independent sampling vector
+n = 1000 #Set number of observations
+set.seed(11)
+for(i in 1:n){
+  x_samp2[i] = rnorm(1, mean = mu, sigma)#Independently sampling each realization value of X_i
+}
+x_samp1 == x_samp2#compare both sampling methods
+hist(x_samp1)
+hist(x_samp2)
+##Testing univariate normality
+#With the null hypothesis of the data comes from normal distribution, each of this test can be used to the hypothesis
+shapiro.test(x_samp1)#Shapiro-Wilk, decide to not reject null
+library(nortest)
+ad.test(x_samp1)#Anderson-Darling, decide to not reject null
+lillie.test(x_samp1)#Lilliefors/Kolmogorov-Smirnov, decide not to reject null
+cvm.test(x_samp1)#Cramer von Mises, decide not to reject null
+
+
 ##Simulating mutivariate normal (MN) distribution based on correlation/covariance matrix, means, and standard deviation
 set.seed(100) #setting seed for pseudo-random initiation
 #in a case where we have the covariance matrix, it is then become a straightforward method to simulate
