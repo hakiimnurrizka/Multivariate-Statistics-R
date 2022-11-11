@@ -79,15 +79,24 @@ w2 = (n2-1)*cov(iris_vers)
 spl = (1/(n1+n2-2))*(w1+w2)
 t2 = (n1*n2/(n1+n2))*t(y1bar-y2bar)%*%solve(spl)%*%(y1bar-y2bar)
 p = dim(iris_set)[2]
-f = (n1+n2-p-1)/((n1+n2-2)*p)*t2
+f = (n1+n2-p-1)/((n1+n2-2)*p)*t2 #F statistics equivalence for the above t2 statistics, 
+#The statistics above is based on textbook rencher: Methods of Multivariate Analysis (2012)
 f
-
+pf(f, 4, 95, lower.tail = F)#Pvalue for the above f statistics
 HotellingsT2(iris_set, iris_vers)
-##hotellingsT2 statistics is already converting into F statistics
+#hotellingsT2 statistics is already converting into F statistics
+#Based on the above test, it is concluded that null hypothesis of equal mean population is rejected.
+#When the null on hypothesis test of difference between 2 mean vectors is rejected,  we can proceed to
+#test individually each variable using univariate test.
+t.test(iris_set$Sepal.Length, iris_vers$Sepal.Length)
+t.test(iris_set$Sepal.Width, iris_vers$Sepal.Width)
+t.test(iris_set$Petal.Length, iris_vers$Petal.Length)
+t.test(iris_set$Petal.Width, iris_vers$Petal.Width)
+
 
 
 ###Test for additional information
-##say we want to test whether certain(s) variable(s) significantly contribute information
+##say we want to test whether certain variable(s) significantly contribute information
 ##on the separation of the other variable(s).
 ##in a sense, similar to significance test of full vs reduced model on regression.
 ##for the previous iris data, lets test whether petal width contribute significant information 
